@@ -1,88 +1,89 @@
-function Seguro(marca, anio, tipo) {
-  this.marca = marca;
-  this.anio = anio;
-  this.tipo = tipo;
+class Seguro {
+  constructor(marca, anio, tipo) {
+    this.marca = marca;
+    this.anio = anio;
+    this.tipo = tipo;
+  }
+  cotizarSeguro() {
+    let cantidad;
+    const base = 2000;
+    switch (this.marca) {
+      case "1":
+        cantidad = base * 1.15;
+
+        break;
+      case "2":
+        cantidad = base * 1.05;
+
+        break;
+      case "3":
+        cantidad = base * 1.35;
+        break;
+    }
+
+    const diferencia = new Date().getFullYear() - this.anio;
+    cantidad -= (diferencia * 3 * cantidad) / 100;
+
+    if (this.tipo === "basico") {
+      cantidad *= 1.3;
+    } else {
+      cantidad *= 1.5;
+    }
+
+    return cantidad;
+  }
 }
 
-Seguro.prototype.cotizarSeguro = function() {
-  let cantidad;
-  const base = 2000;
-  switch (this.marca) {
-    case "1":
-      cantidad = base * 1.15;
+class Interfaz {
+  constructor() {}
+  mostrarMensaje(mensaje, tipo) {
+    const div = document.createElement("div");
 
-      break;
-    case "2":
-      cantidad = base * 1.05;
-
-      break;
-    case "3":
-      cantidad = base * 1.35;
-      break;
+    if (tipo === "error") {
+      div.classList.add("mensaje", "error");
+    } else {
+      div.classList.add("mensaje", "correcto");
+    }
+    div.innerHTML = `${mensaje}`;
+    formulario.insertBefore(div, document.querySelector(".form-group"));
+    setTimeout(function() {
+      document.querySelector(".mensaje").remove();
+    }, 3000);
   }
 
-  const diferencia = new Date().getFullYear() - this.anio;
-  cantidad -= (diferencia * 3 * cantidad) / 100;
+  mostrarResultado(seguro, total) {
+    const resultado = document.getElementById("resultado");
+    let marca;
+    switch (seguro.marca) {
+      case "1":
+        marca = "Americano";
 
-  if (this.tipo === "basico") {
-    cantidad *= 1.3;
-  } else {
-    cantidad *= 1.5;
+        break;
+
+      case "2":
+        marca = "Asiatico";
+        break;
+
+      case "3":
+        marca = "Europeo";
+        break;
+    }
+    const div = document.createElement("div");
+    div.innerHTML = `
+        <p class='header'> Tu resumen: </p>
+       <p> Marca: ${marca} </p>
+        <p>Año: ${seguro.anio} </p>
+        <p>Tipo: ${seguro.tipo} </p>
+        <p>total: $ ${total} </p>
+        `;
+    const spinner = document.querySelector("#cargando img");
+    spinner.style.display = "block";
+    setTimeout(function() {
+      resultado.appendChild(div);
+      spinner.style.display = "none";
+    }, 3000);
   }
-
-  return cantidad;
-};
-
-function Interfaz() {}
-
-Interfaz.prototype.mostrarMensaje = function(mensaje, tipo) {
-  const div = document.createElement("div");
-
-  if (tipo === "error") {
-    div.classList.add("mensaje", "error");
-  } else {
-    div.classList.add("mensaje", "correcto");
-  }
-  div.innerHTML = `${mensaje}`;
-  formulario.insertBefore(div, document.querySelector(".form-group"));
-  setTimeout(function() {
-    document.querySelector(".mensaje").remove();
-  }, 3000);
-};
-
-Interfaz.prototype.mostrarResultado = function(seguro, total) {
-  const resultado = document.getElementById("resultado");
-  let marca;
-  switch (seguro.marca) {
-    case "1":
-      marca = "Americano";
-
-      break;
-
-    case "2":
-      marca = "Asiatico";
-      break;
-
-    case "3":
-      marca = "Europeo";
-      break;
-  }
-  const div = document.createElement("div");
-  div.innerHTML = `
-  <p class='header'> Tu resumen: </p>
- <p> Marca: ${marca} </p>
-  <p>Año: ${seguro.anio} </p>
-  <p>Tipo: ${seguro.tipo} </p>
-  <p>total: $ ${total} </p>
-  `;
-  const spinner = document.querySelector("#cargando img");
-  spinner.style.display = "block";
-  setTimeout(function() {
-    resultado.appendChild(div);
-    spinner.style.display = "none";
-  }, 3000);
-};
-
+}
 const formulario = document.getElementById("cotizar-seguro");
 
 formulario.addEventListener("submit", function(e) {
