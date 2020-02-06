@@ -35,7 +35,7 @@ Seguro.prototype.cotizarSeguro = function() {
 
 function Interfaz() {}
 
-Interfaz.prototype.mostrarError = function(mensaje, tipo) {
+Interfaz.prototype.mostrarMensaje = function(mensaje, tipo) {
   const div = document.createElement("div");
 
   if (tipo === "error") {
@@ -99,7 +99,7 @@ formulario.addEventListener("submit", function(e) {
   const interfaz = new Interfaz();
 
   if (marcaSeleccionada == "" || anioSeleccionado == "" || tipo == "") {
-    interfaz.mostrarError(
+    interfaz.mostrarMensaje(
       "faltan datos, revisar el formulario y prueba de nuevo",
       "error"
     );
@@ -114,6 +114,7 @@ formulario.addEventListener("submit", function(e) {
     const cantidad = seguro.cotizarSeguro(seguro);
 
     interfaz.mostrarResultado(seguro, cantidad);
+    interfaz.mostrarMensaje("cargando...", "correcto");
   }
 });
 
